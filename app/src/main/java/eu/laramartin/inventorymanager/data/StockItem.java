@@ -52,6 +52,7 @@ public class StockItem {
     private final String supplierEmail;
     private final String image;
 
+    //Constructor of this class
     public StockItem(String productName, String price, int quantity, String supplierName, String supplierPhone, String supplierEmail, String image) {
         this.productName = productName;
         this.price = price;
@@ -89,6 +90,7 @@ public class StockItem {
     public String getImage() {
         return image;
     }
+
     @Override
     public String toString() {
         return "StockItem{" +

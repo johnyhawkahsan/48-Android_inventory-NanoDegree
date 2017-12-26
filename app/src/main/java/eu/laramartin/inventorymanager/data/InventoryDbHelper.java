@@ -58,6 +58,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    // creates the Items table when the database is created
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(StockContract.StockEntry.CREATE_TABLE_STOCK);
@@ -78,9 +79,10 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         values.put(StockContract.StockEntry.COLUMN_SUPPLIER_PHONE, item.getSupplierPhone());
         values.put(StockContract.StockEntry.COLUMN_SUPPLIER_EMAIL, item.getSupplierEmail());
         values.put(StockContract.StockEntry.COLUMN_IMAGE, item.getImage());
-        long id = db.insert(StockContract.StockEntry.TABLE_NAME, null, values);
+        long id = db.insert(StockContract.StockEntry.TABLE_NAME, null, values);//This returns the id of the new item created in Database.
     }
 
+    //Cursor stores the searched/found data- readStock() reads all the stock in the Database
     public Cursor readStock() {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
@@ -105,6 +107,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    //This cursor is for the specific Item with specific id.
     public Cursor readItem(long itemId) {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {
@@ -137,11 +140,11 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(StockContract.StockEntry.COLUMN_QUANTITY, quantity);
         String selection = StockContract.StockEntry._ID + "=?";
-        String[] selectionArgs = new String[] { String.valueOf(currentItemId) };
-        db.update(StockContract.StockEntry.TABLE_NAME,
-                values, selection, selectionArgs);
+        String[] selectionArgs = new String[] { String.valueOf(currentItemId) };//selectionArgs replace any question marks in the selection string.
+        db.update(StockContract.StockEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
+    //This method is called when someone clicks on the "Shopping Cart" icon in the inventory items list
     public void sellOneItem(long itemId, int quantity) {
         SQLiteDatabase db = getWritableDatabase();
         int newQuantity = 0;
@@ -152,7 +155,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         values.put(StockContract.StockEntry.COLUMN_QUANTITY, newQuantity);
         String selection = StockContract.StockEntry._ID + "=?";
         String[] selectionArgs = new String[] { String.valueOf(itemId) };
-        db.update(StockContract.StockEntry.TABLE_NAME,
-                values, selection, selectionArgs);
+        db.update(StockContract.StockEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 }
